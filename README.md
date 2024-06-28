@@ -13,25 +13,33 @@ Once you are on the Remix website, create a new file by clicking on the "+" icon
 
 ```solidity
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.26;
+pragma solidity ^0.8.7;
 
-contract MyFirstToken {
-    string public name;
-    string public symbol;
-    uint public totalSupply;
+contract MyToken {
 
-    mapping(address => uint) public balances;
+    // public variables 
+    string public tokenName = "PRIME";
+    string public tokenAbbrv = "PRM";
+    uint public totalSupply = 0;
 
-    constructor(string memory _name, string memory _symbol, uint _initialSupply) {
-        name = _name;
-        symbol = _symbol;
-        mint(msg.sender, _initialSupply);
+    // mapping variable 
+    mapping (address => uint) public balance;
+
+    // mint function
+    function mint (address _address, uint _value) public {
+        totalSupply += _value;
+        balance[_address] += _value;
     }
 
-    function mint(address to, uint amount) public {
-        totalSupply += amount;
-        balances[to] += amount;
+    // burn function
+    function burn (address _address, uint _value) public {
+      if (balance[_address] >= _value){
+       totalSupply -= _value;
+        balance[_address] -= _value;  
+      } 
     }
+
+}
 
     function burn(address from, uint amount) public {
         require(balances[from] >= amount, "Insufficient balance to burn");
